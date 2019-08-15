@@ -58,19 +58,20 @@ model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 
 model.compile(optimizer='adam',
-            loss='sparse_categorical_crossentropy',
-            metrics=['accuracy'])
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
 
 def eval_model(weights):
-    weight_layer_one = np.array(weights[:3*3*1*32]).reshape(3,3,1,32)
-    weight_layer_two = np.array(weights[288:288 + 32]).reshape(32,)
-    weight_layer_three = np.array(weights[320:320 + 3*3*32*64]).reshape(3,3,32,64)
-    weight_layer_four = np.array(weights[18752:18752 + 64]).reshape(64,)
-    weight_layer_five = np.array(weights[18816:18816+9216*64]).reshape(9216,64)
-    weight_layer_six = np.array(weights[608640:608640 + 64]).reshape(64,)
-    weight_layer_seven = np.array(weights[608704:608704+64*10]).reshape(64,10)
-    weight_layer_eight = np.array(weights[-10:]).reshape(10,)
-    
+    weight_layer_one = np.array(weights[:3 * 3 * 1 * 32]).reshape(3, 3, 1, 32)
+    weight_layer_two = np.array(weights[288:288 + 32]).reshape(32, )
+    weight_layer_three = np.array(weights[320:320 + 3 * 3 * 32 * 64]).reshape(3, 3, 32, 64)
+    weight_layer_four = np.array(weights[18752:18752 + 64]).reshape(64, )
+    weight_layer_five = np.array(weights[18816:18816 + 9216 * 64]).reshape(9216, 64)
+    weight_layer_six = np.array(weights[608640:608640 + 64]).reshape(64, )
+    weight_layer_seven = np.array(weights[608704:608704 + 64 * 10]).reshape(64, 10)
+    weight_layer_eight = np.array(weights[-10:]).reshape(10, )
+
     model.set_weights([
         weight_layer_one,
         weight_layer_two,
@@ -81,7 +82,8 @@ def eval_model(weights):
         weight_layer_seven,
         weight_layer_eight
     ])
-    return np.array([-1.*model.evaluate(x_test, y_test,verbose=0 )[1]])
+    return np.array([-1. * model.evaluate(x_test, y_test, verbose=0)[1]])
+
 
 with open(GB_PARAMS) as json_data:
     params = json.load(json_data)
@@ -92,6 +94,6 @@ gb = GenBoost(problem=my_prob)
 pop = gb.run(params)
 result = copy.copy(params)
 result['champion_f'] = pop.champion_f[0]
-with open(RESULT_SAVE,'w', encoding="utf-8", newline='\r\n') as json_data:
-    json.dump(result, json_data, indent = 4)
-pickle.dump(pop.champion_x, open(WEIGHTS_SAVE,'wb'))
+with open(RESULT_SAVE, 'w', encoding="utf-8", newline='\r\n') as json_data:
+    json.dump(result, json_data, indent=4)
+pickle.dump(pop.champion_x, open(WEIGHTS_SAVE, 'wb'))
