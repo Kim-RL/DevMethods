@@ -57,4 +57,3 @@ pop = gb.run(params)
 pop.champion_x
 pop.champion_f
 ```
-
